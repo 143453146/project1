@@ -83,21 +83,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void afterEvent(int event, int result, Object data) {
                 if (result==SMSSDK.RESULT_ERROR) {
-                    try {
-                        Throwable throwable = (Throwable) data;
-                        throwable.printStackTrace();
-                        JSONObject object = new JSONObject(throwable.getMessage());
-                        String des = object.optString("detail");//错误描述
-                        int status = object.optInt("status");//错误代码
-                        if (status > 0 && !TextUtils.isEmpty(des)) {
-                            Log.e("Error",status+"     "+des);
-//                            Toast.makeText(, des, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                    } catch (Exception e) {
-                        //do something
-                    }
-                    handler.sendEmptyMessage(MsgType.CODE_ERROR);
+                    Message msg = new Message();
+                    msg.arg1 = event;
+                    msg.arg2 = result;
+                    msg.obj = data;
+                    msg.what=MsgType.CODE_ERROR;
+                    handler.sendMessage(msg);
                 }
                 else {
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {// 提交验证码成功
@@ -118,16 +109,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void getRegister(){
-        Log.i("XXXXXXX","XXXXXXXXXXX");
         //将收到的验证码和手机号提交再次核对
         SMSSDK.submitVerificationCode("86", et_usertel.getText().toString(), et_code
                 .getText().toString());
-//        if (et_password.getText().toString().length() > 0){
-//            SMSSDK.submitVerificationCode("86", et_usertel.getText().toString(), et_code
-//                    .getText().toString());
-//        }else{
-//            Toast.makeText(LoginActivity.this, "密码不能为空！", Toast.LENGTH_SHORT).show();
-//        }
 
     }
     public void getCode() {
@@ -190,10 +174,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }else if(msg.what == SMSSDK.EVENT_GET_VERIFICATION_CODE){
                 Toast.makeText(getApplicationContext(), "正在获取验证码",
                         Toast.LENGTH_SHORT).show();
-            }else {
-                Toast.makeText(getApplicationContext(), "验证失败",
+            }else if(msg.what==MsgType.CODE_ERROR){
+                Toast.makeText(getApplicationContext(), "发送验证码失败",
                         Toast.LENGTH_SHORT).show();
-                ((Throwable)  msg.obj).printStackTrace();
+                if(msg.obj!=null){
+                    ((Throwable)  msg.obj).printStackTrace();
+                }
             }
         }
     };
@@ -218,11 +204,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             boolean Sign3=true;
             if (Sign2 & Sign3) {
                 btn_register.setBackgroundDrawable(getResources().getDrawable(
-                        R.drawable.btn_en));
+                        R.drawable.draw));
                 btn_register.setEnabled(true);
             } else {
                 btn_register.setBackgroundDrawable(getResources().getDrawable(
-                        R.drawable.btn_en));
+                        R.drawable.draw));
                 btn_register.setTextColor(0xFFD0EFC6);
                 btn_register.setEnabled(false);
             }
