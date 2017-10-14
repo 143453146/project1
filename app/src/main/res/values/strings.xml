@@ -2,4 +2,5 @@
     <string name="app_name">户外媒体村</string>
     <string name="phonenum">请输入手机号</string>
     <string name="testcode">请输入验证码</string>
+    <string name="title_activity_login">LoginActivity</string>
 </resources>
