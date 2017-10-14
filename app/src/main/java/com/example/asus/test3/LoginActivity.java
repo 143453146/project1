@@ -97,6 +97,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     } catch (Exception e) {
                         //do something
                     }
+                    handler.sendEmptyMessage(MsgType.CODE_ERROR);
                 }
                 else {
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {// 提交验证码成功
@@ -183,11 +184,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }else if(msg.what == MsgType.EVENT_SUBMIT_VERIFICATION_CODE){
                 Toast.makeText(getApplicationContext(), "提交验证码成功",
                         Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LoginActivity.this,
+                        MainActivity.class);
+                startActivity(intent);
             }else if(msg.what == SMSSDK.EVENT_GET_VERIFICATION_CODE){
                 Toast.makeText(getApplicationContext(), "正在获取验证码",
                         Toast.LENGTH_SHORT).show();
-            }else if(msg.what==MsgType.CODE_ERROR){
-                Toast.makeText(getApplicationContext(), "验证码错误",
+            }else {
+                Toast.makeText(getApplicationContext(), "验证失败",
                         Toast.LENGTH_SHORT).show();
                 ((Throwable)  msg.obj).printStackTrace();
             }
