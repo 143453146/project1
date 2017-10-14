@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void initListener() {
         //img_back.setOnClickListener(this);
         btn_send.setOnClickListener(this);
+        btn_register.setOnClickListener(this);
 
     }
     void init(){
@@ -116,13 +117,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void getRegister(){
+        Log.i("XXXXXXX","XXXXXXXXXXX");
         //将收到的验证码和手机号提交再次核对
-        if (et_password.getText().toString().length() > 0){
-            SMSSDK.submitVerificationCode("86", et_usertel.getText().toString(), et_code
-                    .getText().toString());
-        }else{
-            Toast.makeText(LoginActivity.this, "密码不能为空！", Toast.LENGTH_SHORT).show();
-        }
+        SMSSDK.submitVerificationCode("86", et_usertel.getText().toString(), et_code
+                .getText().toString());
+//        if (et_password.getText().toString().length() > 0){
+//            SMSSDK.submitVerificationCode("86", et_usertel.getText().toString(), et_code
+//                    .getText().toString());
+//        }else{
+//            Toast.makeText(LoginActivity.this, "密码不能为空！", Toast.LENGTH_SHORT).show();
+//        }
 
     }
     public void getCode() {

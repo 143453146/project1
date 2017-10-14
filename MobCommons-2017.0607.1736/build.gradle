@@ -1,2 +1,2 @@
 configurations.maybeCreate("default")
-artifacts.add("default", file('MobCommons-2017.0607.1736.jar'))
+artifacts.add("default", file('SMSSDK-2.1.3.aar'))
